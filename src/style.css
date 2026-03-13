@@ -1,0 +1,358 @@
+/* ── Reset & base ────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Courier New", Courier, monospace;
+  background: #1a1a1a;
+  color: #00ff00;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* ── Container ───────────────────────────────────────────────────────────── */
+
+.container {
+  max-width: 640px;
+  width: 100%;
+  background: #000;
+  border: 2px solid #00ff00;
+  border-radius: 10px;
+  padding: 30px;
+  margin: 20px auto;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: 28px;
+}
+
+h2 {
+  font-size: 1em;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 14px;
+  border-bottom: 1px solid #003300;
+  padding-bottom: 8px;
+}
+
+/* ── Utility ─────────────────────────────────────────────────────────────── */
+
+.hidden {
+  display: none !important;
+}
+
+.error {
+  color: #ff4444;
+  font-size: 0.875em;
+  margin-top: 8px;
+  min-height: 1.2em;
+}
+
+.hint {
+  font-size: 0.8em;
+  margin-top: 8px;
+}
+
+.hint--warn {
+  color: #ffaa00;
+}
+
+.hint--ok {
+  color: #00cc00;
+}
+
+/* ── Inputs ──────────────────────────────────────────────────────────────── */
+
+.input-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  background: #000;
+  border: 1px solid #00ff00;
+  color: #00ff00;
+  font-family: inherit;
+  font-size: 1em;
+  border-radius: 4px;
+  width: 100%;
+}
+
+input[type="text"]::placeholder {
+  color: #006600;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #00ff00;
+  box-shadow: 0 0 0 2px #003300;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+
+button {
+  font-family: inherit;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  transition: background 0.15s;
+}
+
+.btn-primary {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: #00ff00;
+  color: #000;
+  font-size: 1.1em;
+  margin-top: 8px;
+}
+
+.btn-primary:hover {
+  background: #00dd00;
+}
+
+.btn-secondary {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  color: #00aa00;
+  border: 1px solid #00aa00;
+  font-size: 0.9em;
+  margin-top: 8px;
+}
+
+.btn-secondary:hover {
+  background: #001a00;
+  color: #00ff00;
+  border-color: #00ff00;
+}
+
+.btn-danger {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: #cc0000;
+  color: #fff;
+  margin-top: 12px;
+}
+
+.btn-danger:hover {
+  background: #aa0000;
+}
+
+.btn-inline {
+  padding: 8px 14px;
+  background: #00ff00;
+  color: #000;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.btn-inline:hover {
+  background: #00dd00;
+}
+
+/* ── Setup screen ────────────────────────────────────────────────────────── */
+
+.setup-section {
+  margin-bottom: 28px;
+}
+
+/* Player tags */
+
+.tag-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  min-height: 32px;
+}
+
+.tag-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #003300;
+  border: 1px solid #00ff00;
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 0.9em;
+}
+
+.tag-remove {
+  background: none;
+  border: none;
+  color: #ff4444;
+  font-size: 1.1em;
+  line-height: 1;
+  padding: 0 2px;
+  cursor: pointer;
+}
+
+.tag-remove:hover {
+  color: #ff8888;
+}
+
+.empty-hint {
+  color: #006600;
+  font-size: 0.85em;
+  font-style: italic;
+}
+
+/* Room chips */
+
+.chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.chip {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85em;
+  background: transparent;
+  border: 1px solid #006600;
+  color: #006600;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.chip:hover {
+  border-color: #00cc00;
+  color: #00cc00;
+}
+
+.chip--active {
+  background: #003300;
+  border-color: #00ff00;
+  color: #00ff00;
+}
+
+.chip--active:hover {
+  background: #004400;
+}
+
+.chip--custom {
+  border-style: dashed;
+}
+
+/* ── Play screen ─────────────────────────────────────────────────────────── */
+
+.rules {
+  margin-bottom: 28px;
+  line-height: 1.7;
+}
+
+.rules-title {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.rules-content ol {
+  padding-left: 10px;
+  margin-left: 20px;
+  margin-bottom: 12px;
+}
+
+.rules-content li {
+  margin-bottom: 10px;
+}
+
+.encouragement {
+  color: #00cc00;
+  margin-top: 10px;
+}
+
+.play-input-group {
+  margin-bottom: 16px;
+}
+
+/* Assignment result */
+
+.result {
+  display: none;
+  margin-top: 20px;
+  padding: 20px;
+  background: #003300;
+  border: 2px solid #00ff00;
+  border-radius: 5px;
+  line-height: 1.9;
+}
+
+.result.show {
+  display: block;
+}
+
+/* ── Mute button ─────────────────────────────────────────────────────────── */
+
+.mute-btn {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #000;
+  border: 1px solid #006600;
+  color: #006600;
+  font-size: 1.1em;
+  padding: 0;
+  line-height: 1;
+  z-index: 100;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.mute-btn:hover {
+  border-color: #00ff00;
+  color: #00ff00;
+}
+
+/* ── Mobile ──────────────────────────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .container {
+    padding: 20px;
+    margin: 10px auto;
+  }
+
+  h1 {
+    font-size: 1.5em;
+  }
+
+  .input-row {
+    flex-direction: column;
+  }
+
+  .btn-inline {
+    width: 100%;
+  }
+}
