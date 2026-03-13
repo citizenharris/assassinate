@@ -71,6 +71,11 @@ function renderPlayerCount(): void {
     el.textContent = `${n} player${n > 1 ? "s" : ""} ready.`;
     el.className = "hint hint--ok";
   }
+
+  const startBtn = getElement("start-game-btn");
+  if (startBtn instanceof HTMLButtonElement) {
+    startBtn.disabled = n < 3;
+  }
 }
 
 function addPlayer(): void {

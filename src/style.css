@@ -71,15 +71,15 @@ body::before {
   top: 0;
   left: 0;
   right: 0;
-  height: 50vh;
-  background: radial-gradient(ellipse at 50% 0%, rgba(192, 57, 43, 0.22) 0%, transparent 70%);
+  height: 55vh;
+  background: radial-gradient(ellipse at 50% 0%, rgba(192, 57, 43, 0.55) 0%, rgba(192, 57, 43, 0.15) 40%, transparent 70%);
   pointer-events: none;
   z-index: 0;
   animation: glow-pulse 4s ease-in-out infinite;
 }
 
 @keyframes glow-pulse {
-  0%, 100% { opacity: 0.6; }
+  0%, 100% { opacity: 0.65; }
   50% { opacity: 1; }
 }
 
@@ -237,9 +237,16 @@ button:active {
   box-shadow: 0 2px 12px rgba(192, 57, 43, 0.35);
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
   background: var(--red-bright);
   box-shadow: 0 4px 16px rgba(192, 57, 43, 0.45);
+}
+
+.btn-primary:disabled {
+  background: var(--surface-high);
+  color: var(--text-dim);
+  box-shadow: none;
+  cursor: not-allowed;
 }
 
 .btn-secondary {
