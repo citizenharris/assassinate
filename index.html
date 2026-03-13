@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assassin</title>
+    <script type="module" crossorigin src="./assets/index-StQ4U0Pz.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DT1OmEvW.css">
+  </head>
+  <body>
+    <audio id="bg-audio" src="./doot-doot.mp3" loop></audio>
+    <button id="mute-btn" class="mute-btn" aria-label="Mute background music">♪</button>
+
+    <div class="container">
+      <h1>🔪 Assassin 🔪</h1>
+
+      <!-- ── Setup screen ──────────────────────────────────────────────── -->
+      <div id="setup-screen">
+
+        <section class="setup-section">
+          <h2>Players</h2>
+          <div class="input-row">
+            <input
+              type="text"
+              id="player-input"
+              placeholder="First name..."
+              autocomplete="off"
+              autocapitalize="words"
+            />
+            <button id="add-player-btn" class="btn-inline">Add</button>
+          </div>
+          <div id="player-error" class="error"></div>
+          <ul id="player-list" class="tag-list"></ul>
+          <p id="player-count" class="hint"></p>
+        </section>
+
+        <section class="setup-section">
+          <h2>Rooms</h2>
+          <p style="font-size: 0.85em; color: #00aa00; margin-bottom: 12px;">
+            Toggle rooms in your house. Active rooms determine the weapon pool —
+            weapons and locations are assigned independently.
+          </p>
+          <div id="room-chips" class="chip-grid"></div>
+          <div class="input-row">
+            <input
+              type="text"
+              id="room-input"
+              placeholder="Add a custom room..."
+              autocomplete="off"
+              autocapitalize="words"
+            />
+            <button id="add-room-btn" class="btn-inline">Add</button>
+          </div>
+          <div id="room-error" class="error"></div>
+          <p id="weapon-count" class="hint"></p>
+        </section>
+
+        <div id="setup-error" class="error" style="margin-bottom: 8px;"></div>
+        <button id="start-game-btn" class="btn-primary">Start Game</button>
+        <button id="copy-link-btn" class="btn-secondary">Copy game link</button>
+
+      </div>
+
+      <!-- ── Play screen ───────────────────────────────────────────────── -->
+      <div id="play-screen" class="hidden">
+
+        <div class="rules">
+          <div class="rules-title">The rules:</div>
+          <div class="rules-content">
+            <ol>
+              <li>You are trying to kill your victim with the specified weapon, <em>only in the specified location</em>.</li>
+              <li>You must hand them the weapon. Throwing it and having it caught does not count.</li>
+              <li>You cannot conceal the weapon inside another object — hand it over undisguised.</li>
+              <li>If you successfully assassinate someone you inherit their victim and must now kill that person.</li>
+              <li>The last one standing wins!</li>
+            </ol>
+          </div>
+          <div class="encouragement">Be creative! The game is afoot!</div>
+        </div>
+
+        <div class="play-input-group">
+          <label for="name">Enter your full first name, killer:</label>
+          <input
+            type="text"
+            id="name"
+            placeholder="Your name..."
+            autocomplete="off"
+            autocapitalize="words"
+          />
+          <div id="play-error" class="error"></div>
+        </div>
+
+        <button id="claim-btn" class="btn-primary">Claim your victim</button>
+
+        <div id="result" class="result">
+          <div id="assignment"></div>
+          <button id="clear-btn" class="btn-danger">Clear screen</button>
+        </div>
+
+        <button id="new-game-btn" class="btn-secondary" style="margin-top: 24px;">← New game</button>
+
+      </div>
+    </div>
+
+  </body>
+</html>
