@@ -1,6 +1,6 @@
 /**
  * Maps each room to the weapons that could plausibly be *found* there.
- * Weapons and rooms are assigned independently at game time — the fun is
+ * Weapons and rooms are assigned independently at game time - the fun is
  * in the mismatch (e.g. kill someone in the garden using a rubber duck).
  */
 export const ROOM_WEAPONS: Readonly<Record<string, readonly string[] | undefined>> = {

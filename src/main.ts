@@ -212,8 +212,8 @@ function claimVictim(): void {
     assignmentDiv.innerHTML = `
       You are killing <b>${plot.victim}</b><br>
       with <b>${plot.weapon}</b><br>
-      in <b>${plot.room}</b>.<br><br>
-      Write this down and do not tell anyone!
+      in <b>the ${plot.room.toLowerCase()}</b>.
+      <p class="result-footer">Write this down and tell no one.</p>
     `;
     getElement("result").classList.add("show");
     nameInput.value = "";
