@@ -515,6 +515,33 @@ button:active {
   color: var(--text-secondary);
 }
 
+/* ── Language toggle button ──────────────────────────────────────────────── */
+
+.lang-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 68px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border-mid);
+  color: var(--text-dim);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 0;
+  line-height: 1;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.lang-btn:hover {
+  border-color: var(--border-active);
+  color: var(--text-secondary);
+}
+
 /* ── Mobile ──────────────────────────────────────────────────────────────── */
 
 @media (max-width: 480px) {

@@ -1,5 +1,6 @@
 import { DEFAULT_ROOMS, ROOM_WEAPONS } from "./data.ts";
 import { buildWeaponPool, decodeConfig, encodeConfig, setup, titleCase } from "./game.ts";
+import { d, getLang, setLang, t, translateRoom, translateWeapon } from "./i18n.ts";
 import type { Plots } from "./types.ts";
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -30,12 +31,37 @@ function clearError(id: string): void {
   getElement(id).textContent = "";
 }
 
+// ── i18n ──────────────────────────────────────────────────────────────────────
+
+function applyStaticTranslations(): void {
+  document.title = t("title");
+
+  document.querySelectorAll<HTMLElement>("[data-i18n]").forEach((el) => {
+    el.textContent = t(el.dataset["i18n"] as Parameters<typeof t>[0]);
+  });
+
+  document.querySelectorAll<HTMLElement>("[data-i18n-html]").forEach((el) => {
+    el.innerHTML = t(el.dataset["i18nHtml"] as Parameters<typeof t>[0]);
+  });
+
+  document.querySelectorAll<HTMLInputElement>("[data-i18n-placeholder]").forEach((el) => {
+    el.placeholder = t(el.dataset["i18nPlaceholder"] as Parameters<typeof t>[0]);
+  });
+
+  document.querySelectorAll<HTMLElement>("[data-i18n-aria-label]").forEach((el) => {
+    el.setAttribute(
+      "aria-label",
+      t(el.dataset["i18nAriaLabel"] as Parameters<typeof t>[0])
+    );
+  });
+}
+
 // ── Setup: players ────────────────────────────────────────────────────────────
 
 function renderPlayerList(): void {
   const list = getElement("player-list");
   if (players.length === 0) {
-    list.innerHTML = `<li class="empty-hint">No players yet.</li>`;
+    list.innerHTML = `<li class="empty-hint">${t("noPlayersYet")}</li>`;
     return;
   }
   list.innerHTML = players
@@ -43,7 +69,7 @@ function renderPlayerList(): void {
       (name, i) => `
       <li class="tag-item">
         <span>${name}</span>
-        <button class="tag-remove" data-index="${i}" aria-label="Remove ${name}">×</button>
+        <button class="tag-remove" data-index="${i}" aria-label="${d().removeAriaLabel(name)}">×</button>
       </li>`
     )
     .join("");
@@ -62,13 +88,13 @@ function renderPlayerCount(): void {
   const el = getElement("player-count");
   const n = players.length;
   if (n === 0) {
-    el.textContent = "Add at least 3 players to start.";
+    el.textContent = t("addAtLeast3");
     el.className = "hint hint--warn";
   } else if (n < 3) {
-    el.textContent = `${n} player${n > 1 ? "s" : ""} — need ${3 - n} more.`;
+    el.textContent = d().playerCountWarn(n);
     el.className = "hint hint--warn";
   } else {
-    el.textContent = `${n} player${n > 1 ? "s" : ""} ready.`;
+    el.textContent = d().playerCountOk(n);
     el.className = "hint hint--ok";
   }
 
@@ -86,7 +112,7 @@ function addPlayer(): void {
   if (!name) return;
 
   if (players.includes(name)) {
-    setError("player-error", `${name} is already in the list.`);
+    setError("player-error", d().playerAlreadyInList(name));
     return;
   }
 
@@ -113,7 +139,7 @@ function renderRoomChips(): void {
           data-room="${room}"
           data-custom="${isCustom}"
           aria-pressed="${String(active)}"
-        >${room}</button>`;
+        >${translateRoom(room)}</button>`;
     })
     .join("");
 
@@ -138,9 +164,7 @@ function renderWeaponCount(): void {
   const el = getElement("weapon-count");
   const count = buildWeaponPool(selectedRooms).length;
   el.textContent =
-    count === 0
-      ? "No weapons available — select at least one known room."
-      : `${count} weapon${count > 1 ? "s" : ""} in the pool.`;
+    count === 0 ? t("noWeaponsAvailable") : d().weaponCount(count);
   el.className = count === 0 ? "hint hint--warn" : "hint hint--ok";
 }
 
@@ -152,7 +176,7 @@ function addCustomRoom(): void {
   if (!room) return;
 
   if (selectedRooms.includes(room)) {
-    setError("room-error", `${room} is already included.`);
+    setError("room-error", d().roomAlreadyIncluded(room));
     return;
   }
 
@@ -182,15 +206,15 @@ function startGame(gamePlayers: string[], gameRooms: string[]): void {
   clearError("setup-error");
 
   if (gamePlayers.length < 3) {
-    setError("setup-error", "You need at least 3 players to start.");
+    setError("setup-error", t("needAtLeast3"));
     return;
   }
   if (gameRooms.length === 0) {
-    setError("setup-error", "You need at least one room.");
+    setError("setup-error", t("needAtLeastOneRoom"));
     return;
   }
   if (buildWeaponPool(gameRooms).length === 0) {
-    setError("setup-error", "No weapons available — select at least one known room.");
+    setError("setup-error", t("noWeaponsSetupError"));
     return;
   }
 
@@ -206,27 +230,24 @@ function claimVictim(): void {
   clearError("play-error");
 
   if (!playerName) {
-    setError("play-error", "Please enter your name!");
+    setError("play-error", t("enterYourName"));
     return;
   }
 
   const plot = plots[playerName];
 
   if (plot) {
+    const weapon = translateWeapon(plot.weapon);
+    const room = translateRoom(plot.room);
     const assignmentDiv = getElement("assignment");
     assignmentDiv.innerHTML = `
-      You are killing <b>${plot.victim}</b><br>
-      with <b>${plot.weapon}</b><br>
-      in <b>the ${plot.room.toLowerCase()}</b>.
-      <p class="result-footer">Write this down and tell no one.</p>
+      ${d().assignment(plot.victim, weapon, room)}
+      <p class="result-footer">${t("resultFooter")}</p>
     `;
     getElement("result").classList.add("show");
     nameInput.value = "";
   } else {
-    setError(
-      "play-error",
-      "This name is not in the list! Remember to use your full first name, no nicknames."
-    );
+    setError("play-error", t("nameNotInList"));
     getElement("result").classList.remove("show");
   }
 }
@@ -241,7 +262,7 @@ function copyGameLink(): void {
   clearError("setup-error");
 
   if (players.length < 3) {
-    setError("setup-error", "Add at least 3 players before copying the link.");
+    setError("setup-error", t("addPlayersBeforeCopying"));
     return;
   }
 
@@ -250,9 +271,9 @@ function copyGameLink(): void {
 
   void navigator.clipboard.writeText(url).then(() => {
     const btn = getElement("copy-link-btn");
-    btn.textContent = "Copied!";
+    btn.textContent = t("copied");
     window.setTimeout(() => {
-      btn.textContent = "Copy game link";
+      btn.textContent = t("copyLinkBtn");
     }, 2000);
   });
 }
@@ -273,6 +294,7 @@ function loadFromHash(): boolean {
 // ── Init ──────────────────────────────────────────────────────────────────────
 
 function init(): void {
+  applyStaticTranslations();
   renderPlayerList();
   renderPlayerCount();
   renderRoomChips();
@@ -315,6 +337,17 @@ function init(): void {
     showSetupScreen();
   });
 
+  // Language toggle
+  getElement("lang-btn").addEventListener("click", () => {
+    setLang(getLang() === "en" ? "it" : "en");
+    getElement("lang-btn").textContent = getLang() === "en" ? "IT" : "EN";
+    applyStaticTranslations();
+    renderPlayerList();
+    renderPlayerCount();
+    renderRoomChips();
+    renderWeaponCount();
+  });
+
   // Load from URL hash if present, otherwise show setup
   if (!loadFromHash()) {
     showSetupScreen();
@@ -351,16 +384,13 @@ function init(): void {
       audioStarted = true;
       void audio.play();
       muteBtn.textContent = "♪";
-      muteBtn.setAttribute("aria-label", "Mute background music");
+      muteBtn.setAttribute("aria-label", t("muteAriaLabel"));
       return;
     }
 
     audio.muted = !audio.muted;
     muteBtn.textContent = audio.muted ? "♪̸" : "♪";
-    muteBtn.setAttribute(
-      "aria-label",
-      audio.muted ? "Unmute background music" : "Mute background music"
-    );
+    muteBtn.setAttribute("aria-label", audio.muted ? t("unmuteAriaLabel") : t("muteAriaLabel"));
   });
 }
 

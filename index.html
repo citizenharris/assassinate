@@ -8,25 +8,27 @@
   </head>
   <body>
     <audio id="bg-audio" src="/doot-doot.mp3" loop></audio>
-    <button id="mute-btn" class="mute-btn" aria-label="Mute background music">♪</button>
+    <button id="mute-btn" class="mute-btn" aria-label="Mute background music" data-i18n-aria-label="muteAriaLabel">♪</button>
+    <button id="lang-btn" class="lang-btn">IT</button>
 
     <div class="container">
-      <h1>🔪 Assassin 🔪</h1>
+      <h1 data-i18n="h1">🔪 Assassin 🔪</h1>
 
       <!-- ── Setup screen ──────────────────────────────────────────────── -->
       <div id="setup-screen">
 
         <section class="setup-section">
-          <h2>Players</h2>
+          <h2 data-i18n="playersHeading">Players</h2>
           <div class="input-row">
             <input
               type="text"
               id="player-input"
               placeholder="First name..."
+              data-i18n-placeholder="playerInputPlaceholder"
               autocomplete="off"
               autocapitalize="words"
             />
-            <button id="add-player-btn" class="btn-inline">Add</button>
+            <button id="add-player-btn" class="btn-inline" data-i18n="addPlayerBtn">Add</button>
           </div>
           <div id="player-error" class="error"></div>
           <ul id="player-list" class="tag-list"></ul>
@@ -34,8 +36,8 @@
         </section>
 
         <section class="setup-section">
-          <h2>Rooms</h2>
-          <p class="section-description">
+          <h2 data-i18n="roomsHeading">Rooms</h2>
+          <p class="section-description" data-i18n="roomsDescription">
             Toggle the rooms in your house. Active rooms build the weapon pool —
             weapons and locations are then assigned independently.
           </p>
@@ -45,10 +47,11 @@
               type="text"
               id="room-input"
               placeholder="Add a custom room..."
+              data-i18n-placeholder="roomInputPlaceholder"
               autocomplete="off"
               autocapitalize="words"
             />
-            <button id="add-room-btn" class="btn-inline">Add</button>
+            <button id="add-room-btn" class="btn-inline" data-i18n="addRoomBtn">Add</button>
           </div>
           <div id="room-error" class="error"></div>
           <p id="weapon-count" class="hint"></p>
@@ -56,8 +59,8 @@
 
         <div class="setup-actions">
           <div id="setup-error" class="error"></div>
-          <button id="start-game-btn" class="btn-primary">Start Game</button>
-          <button id="copy-link-btn" class="btn-secondary">Copy game link</button>
+          <button id="start-game-btn" class="btn-primary" data-i18n="startGameBtn">Start Game</button>
+          <button id="copy-link-btn" class="btn-secondary" data-i18n="copyLinkBtn">Copy game link</button>
         </div>
 
       </div>
@@ -66,39 +69,40 @@
       <div id="play-screen" class="hidden">
 
         <div class="rules">
-          <div class="rules-title">The rules</div>
+          <div class="rules-title" data-i18n="rulesTitle">The rules</div>
           <div class="rules-content">
             <ol>
-              <li>Kill your victim with the specified weapon, <em>only in the specified location</em>.</li>
-              <li>You must hand them the weapon - throwing it doesn't count.</li>
-              <li>The weapon must be handed over undisguised.</li>
-              <li>A successful assassination means you inherit your victim's target.</li>
-              <li>Last one standing wins.</li>
+              <li data-i18n-html="rule1">Kill your victim with the specified weapon, <em>only in the specified location</em>.</li>
+              <li data-i18n="rule2">You must hand them the weapon — throwing it doesn't count.</li>
+              <li data-i18n="rule3">The weapon must be handed over undisguised.</li>
+              <li data-i18n="rule4">A successful assassination means you inherit your victim's target.</li>
+              <li data-i18n="rule5">Last one standing wins.</li>
             </ol>
           </div>
-          <div class="encouragement">Be creative. The game is afoot!</div>
+          <div class="encouragement" data-i18n="encouragement">Be creative. The game is afoot!</div>
         </div>
 
         <div class="play-input-group">
-          <label for="name">Your first name, killer</label>
+          <label for="name" data-i18n="playLabel">Your first name, killer</label>
           <input
             type="text"
             id="name"
             placeholder="Enter your name..."
+            data-i18n-placeholder="nameInputPlaceholder"
             autocomplete="off"
             autocapitalize="words"
           />
           <div id="play-error" class="error"></div>
         </div>
 
-        <button id="claim-btn" class="btn-primary">Claim your victim</button>
+        <button id="claim-btn" class="btn-primary" data-i18n="claimBtn">Claim your victim</button>
 
         <div id="result" class="result">
           <div id="assignment"></div>
-          <button id="clear-btn" class="btn-danger">Clear screen</button>
+          <button id="clear-btn" class="btn-danger" data-i18n="clearBtn">Clear screen</button>
         </div>
 
-        <button id="new-game-btn" class="btn-secondary btn-back">← New game</button>
+        <button id="new-game-btn" class="btn-secondary btn-back" data-i18n="newGameBtn">← New game</button>
 
       </div>
     </div>
