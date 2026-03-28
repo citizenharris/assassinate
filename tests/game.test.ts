@@ -207,4 +207,50 @@ describe("encodeConfig / decodeConfig", () => {
     const bad = btoa(JSON.stringify({ players: [1, 2, 3], rooms: ["Kitchen"] }));
     expect(decodeConfig(bad)).toBeNull();
   });
+
+  it("round-trips a config with roomNames", () => {
+    const withNames = {
+      players: ["Alice", "Bob", "Charlie"],
+      rooms: ["Kitchen", "Garden"],
+      roomNames: { Garden: "Outside", Kitchen: "Cook House" },
+    };
+    const encoded = encodeConfig(withNames);
+    const decoded = decodeConfig(encoded);
+    expect(decoded).toEqual(withNames);
+  });
+
+  it("omits roomNames from encoded payload when empty", () => {
+    const encoded = encodeConfig({ ...config, roomNames: {} });
+    const raw = JSON.parse(atob(encoded)) as Record<string, unknown>;
+    expect(raw).not.toHaveProperty("roomNames");
+  });
+
+  it("decodes a config without roomNames as undefined", () => {
+    const encoded = encodeConfig(config);
+    const decoded = decodeConfig(encoded);
+    expect(decoded?.roomNames).toBeUndefined();
+  });
+});
+
+// ── room renaming does not affect weapon pool ────────────────────────────────
+
+describe("room renaming and weapon pool", () => {
+  it("buildWeaponPool uses the original room key, not a display name", () => {
+    // The weapon pool is keyed on original room names in ROOM_WEAPONS.
+    // Even if the UI tracks a rename like Garden → Outside, the
+    // selectedRooms array still contains "Garden" so weapons resolve.
+    const pool = buildWeaponPool(["Garden"]);
+    expect(pool.length).toBeGreaterThan(0);
+    // A renamed display name would not match any key in ROOM_WEAPONS
+    expect(buildWeaponPool(["Outside"])).toEqual([]);
+  });
+
+  it("setup assigns rooms using original keys regardless of display names", () => {
+    const players = ["Alice", "Bob", "Charlie"];
+    const rooms = ["Kitchen", "Garden"];
+    const plots = setup(players, rooms);
+    for (const plot of Object.values(plots)) {
+      expect(rooms).toContain(plot!.room);
+    }
+  });
 });

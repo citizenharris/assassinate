@@ -7,6 +7,7 @@ import type { Plots } from "./types.ts";
 
 let players: string[] = [];
 let selectedRooms: string[] = [...DEFAULT_ROOMS];
+let roomNames: Record<string, string> = {};
 let plots: Plots = {};
 
 // ── DOM helpers ───────────────────────────────────────────────────────────────
@@ -124,6 +125,10 @@ function addPlayer(): void {
 
 // ── Setup: rooms ──────────────────────────────────────────────────────────────
 
+function displayRoomName(roomKey: string): string {
+  return roomNames[roomKey] ?? translateRoom(roomKey);
+}
+
 function renderRoomChips(): void {
   const container = getElement("room-chips");
   const knownRooms = Object.keys(ROOM_WEAPONS);
@@ -134,12 +139,17 @@ function renderRoomChips(): void {
     .map((room) => {
       const active = selectedRooms.includes(room);
       const isCustom = !knownRooms.includes(room);
-      return `<button
-          class="chip${active ? " chip--active" : ""}${isCustom ? " chip--custom" : ""}"
-          data-room="${room}"
-          data-custom="${isCustom}"
-          aria-pressed="${String(active)}"
-        >${translateRoom(room)}</button>`;
+      const rename = active
+        ? `<button class="chip-rename" data-rename-room="${room}" aria-label="Rename ${room}">✎</button>`
+        : "";
+      return `<span class="chip-group${active ? "" : " chip-group--inactive"}">
+          <button
+            class="chip${active ? " chip--active" : ""}${isCustom ? " chip--custom" : ""}"
+            data-room="${room}"
+            data-custom="${isCustom}"
+            aria-pressed="${String(active)}"
+          >${displayRoomName(room)}</button>${rename}
+        </span>`;
     })
     .join("");
 
@@ -151,13 +161,33 @@ function renderRoomChips(): void {
       if (selectedRooms.includes(room)) {
         selectedRooms = selectedRooms.filter((r) => r !== room);
       } else if (!isCustom) {
-        // Re-add a known room that was toggled off
         selectedRooms = [...selectedRooms, room];
       }
       renderRoomChips();
       renderWeaponCount();
     });
   });
+
+  container.querySelectorAll<HTMLButtonElement>(".chip-rename").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const roomKey = btn.dataset["renameRoom"] ?? "";
+      renameRoom(roomKey);
+    });
+  });
+}
+
+function renameRoom(roomKey: string): void {
+  const currentName = roomNames[roomKey] ?? roomKey;
+  const newName = window.prompt(t("renameRoomPrompt"), currentName);
+  if (newName === null) return;
+  const trimmed = newName.trim();
+  if (!trimmed || trimmed === roomKey) {
+    roomNames = Object.fromEntries(Object.entries(roomNames).filter(([k]) => k !== roomKey));
+  } else {
+    roomNames[roomKey] = trimmed;
+  }
+  renderRoomChips();
 }
 
 function renderWeaponCount(): void {
@@ -238,7 +268,7 @@ function claimVictim(): void {
 
   if (plot) {
     const weapon = translateWeapon(plot.weapon);
-    const room = translateRoom(plot.room);
+    const room = displayRoomName(plot.room);
     const assignmentDiv = getElement("assignment");
     assignmentDiv.innerHTML = `
       ${d().assignment(plot.victim, weapon, room)}
@@ -266,7 +296,7 @@ function copyGameLink(): void {
     return;
   }
 
-  const encoded = encodeConfig({ players, rooms: selectedRooms });
+  const encoded = encodeConfig({ players, rooms: selectedRooms, roomNames });
   const url = `${window.location.origin}${window.location.pathname}#${encoded}`;
 
   void navigator.clipboard.writeText(url).then(() => {
@@ -287,6 +317,7 @@ function loadFromHash(): boolean {
 
   players = [...config.players];
   selectedRooms = [...config.rooms];
+  roomNames = config.roomNames ? { ...config.roomNames } : {};
   startGame(players, selectedRooms);
   return true;
 }
@@ -329,6 +360,7 @@ function init(): void {
     window.location.hash = "";
     players = [];
     selectedRooms = [...DEFAULT_ROOMS];
+    roomNames = {};
     plots = {};
     renderPlayerList();
     renderPlayerCount();

@@ -68,7 +68,7 @@ describe("t()", () => {
       "noPlayersYet", "addAtLeast3", "noWeaponsAvailable",
       "needAtLeast3", "needAtLeastOneRoom", "noWeaponsSetupError",
       "enterYourName", "nameNotInList", "addPlayersBeforeCopying",
-      "copied", "resultFooter",
+      "copied", "resultFooter", "renameRoomPrompt",
     ];
     for (const lang of ["en", "it"] as const) {
       setLang(lang);

@@ -387,6 +387,39 @@ button:active {
   border-style: dashed;
 }
 
+.chip-group {
+  display: inline-flex;
+  align-items: center;
+}
+
+.chip-group--inactive {
+  display: inline;
+}
+
+.chip-rename {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 0.65rem;
+  line-height: 1;
+  padding: 0;
+  margin-left: -6px;
+  background: var(--surface-high);
+  border: 1px solid var(--border-mid);
+  color: var(--text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.chip-rename:hover {
+  background: var(--red-dim);
+  border-color: rgba(192, 57, 43, 0.5);
+  color: var(--text);
+}
+
 /* ── Setup action area ───────────────────────────────────────────────────── */
 
 .setup-actions {

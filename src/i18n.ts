@@ -169,6 +169,7 @@ const STATIC = {
     addPlayersBeforeCopying: "Add at least 3 players before copying the link.",
     copied: "Copied!",
     resultFooter: "Write this down and tell no one.",
+    renameRoomPrompt: "Rename room:",
   },
   it: {
     title: "Assassino",
@@ -210,6 +211,7 @@ const STATIC = {
     addPlayersBeforeCopying: "Aggiungi almeno 3 giocatori prima di copiare il link.",
     copied: "Copiato!",
     resultFooter: "Scrivilo e non dirlo a nessuno.",
+    renameRoomPrompt: "Rinomina stanza:",
   },
 } as const;
 

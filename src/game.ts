@@ -73,7 +73,11 @@ export function setup(players: readonly string[], rooms: readonly string[]): Plo
 }
 
 export function encodeConfig(config: GameConfig): string {
-  return btoa(JSON.stringify(config));
+  const payload: Record<string, unknown> = { players: config.players, rooms: config.rooms };
+  if (config.roomNames && Object.keys(config.roomNames).length > 0) {
+    payload["roomNames"] = config.roomNames;
+  }
+  return btoa(JSON.stringify(payload));
 }
 
 export function decodeConfig(encoded: string): GameConfig | null {
@@ -96,7 +100,13 @@ export function decodeConfig(encoded: string): GameConfig | null {
     ) {
       return null;
     }
-    return { players, rooms };
+    const roomNames =
+      "roomNames" in (parsed as Record<string, unknown>) &&
+      typeof (parsed as Record<string, unknown>)["roomNames"] === "object" &&
+      (parsed as Record<string, unknown>)["roomNames"] !== null
+        ? ((parsed as Record<string, unknown>)["roomNames"] as Record<string, string>)
+        : undefined;
+    return { players, rooms, roomNames };
   } catch {
     return null;
   }
